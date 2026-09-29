@@ -9,7 +9,6 @@ struct Config: Codable, Equatable {
     var configuration: String?
     var derivedDataPath: String?
     var testPlan: String?
-    var defaultDestination: String?
 
     static let fileName = ".scheme-mcp.json"
     static let empty = Config()

@@ -95,11 +95,14 @@ claude mcp add --scope user --transport stdio scheme-mcp \
   "workspace": "MyApp.xcworkspace",
   "scheme": "MyApp",
   "configuration": "Debug",
-  "derivedDataPath": "DerivedData"
+  "derivedDataPath": "DerivedData",
+  "testPlan": "MyAppTests"
 }
 ```
 
 ツール呼び出しで `scheme` を渡せば、その都度上書きできます。
+
+`testPlan` は `test` のときだけ `xcodebuild -testPlan` に渡ります。
 
 無加工の `xcodebuild` ログは `~/Library/Caches/scheme-mcp/logs/` に残り、そのパスを `job_status` が `log_path` で返します。リポジトリは汚しません。
 
