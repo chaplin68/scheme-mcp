@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A new push to the same branch makes the previous run pointless.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Report the toolchain
+        run: |
+          swift --version
+          xcodebuild -version
+
+      # Without pipefail the step takes tee's exit status, so a failing build would sail
+      # through and only surface later, in a test run that never should have started.
+      - name: Build
+        shell: bash
+        run: |
+          set -o pipefail
+          swift build 2>&1 | tee build.log
+
+      # Warnings are not failed builds, so nothing stops them accumulating until they bury the
+      # next real one. Only this project's own sources are checked: a dependency's warnings are
+      # not ours to fix, and a toolchain bump would otherwise break CI on unrelated code.
+      - name: Fail on warnings in our own sources
+        run: |
+          if grep -E "Sources/SchemeMCP/.*warning:" build.log; then
+            echo "::error::the build emitted warnings in Sources/SchemeMCP"
+            exit 1
+          fi
+
+      - name: Test
+        run: swift test
