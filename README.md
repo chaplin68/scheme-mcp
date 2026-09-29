@@ -148,12 +148,6 @@ swift test
 
 ---
 
-## 🙏 由来
-
-[porunga](https://github.com/chaplin68/porunga) から MCP 部分だけを取り出したものです。porunga は同じ処理を TUI と CLI からも扱えますが、エージェントに渡すだけならこちらで足ります。
-
----
-
 ## 📄 ライセンス
 
 MIT。[LICENSE](LICENSE) を参照してください。
